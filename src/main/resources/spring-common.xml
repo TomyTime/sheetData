@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!-- 配置数据源 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"></property>
+        <property name="url" value="jdbc:derby:D:/myJob/Workspaces2/CanteenAccount/target/classes/com/canteen/database/canteenAccountDB;create=true"></property>
+        <!--<property name="username" value="root"></property>
+        <property name="password" value="1"></property>-->
+    </bean>
+
+    <!-- 配置SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.canteen.entity.Goods</value>
+                <value>com.canteen.entity.User</value>
+                <value>com.canteen.entity.Capacity</value>
+                <value>com.canteen.entity.Purchase</value>
+                <value>com.canteen.entity.Trade</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置一个事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- 针对声明式的事物 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <aop:config>
+        <aop:pointcut id="txServices" expression="execution(* com.canteen.service..*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txServices" />
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="create*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+    <bean id="baseDao" class="com.canteen.common.dao.BaseDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+</beans>
