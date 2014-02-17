@@ -23,16 +23,16 @@ public class testUtil {
 //            Connection conn = DriverManager.getConnection(dbURL);//启动嵌入式数据库
             Connection conn = db.getConnection(dbName, "", "");
             Statement st = conn.createStatement();
-            //st.execute("create table t_user (id VARCHAR(32) NOT NULL)");//创建foo表
+            //st.execute("delete from member u where u.id = '402881e44440657501444077339a0004'");//创建foo表
             StringBuffer sb = new StringBuffer();
-            sb.append("CREATE TABLE capacity")
+            /*sb.append("CREATE TABLE capacity")
                     .append("(")
                     .append("id varchar(32) NOT NULL PRIMARY KEY ,")
                     .append("amount varchar(8) NOT NULL, " )
                     .append("subtotal varchar(16) NOT NULL " )
-                    .append(")");
-            System.out.println("sql = " + sb.toString());
-            st.execute(sb.toString());
+                    .append(")");*/
+            //System.out.println("sql = " + sb.toString());
+            //st.execute(sb.toString());
            // st.executeUpdate("insert into t_user(id) values ('1')");//插入一条数据
             //ResultSet rs = st.executeQuery("select * from member");//读取刚插入的数据
             //st.executeUpdate("delete from goods");
@@ -47,11 +47,10 @@ public class testUtil {
             for(int i = 0; i < sqlArray.length; i++){
                 //st.executeUpdate(sqlArray[i]);
             }*/
-            ResultSet rs = st.executeQuery("select * from goods");//读取刚插入的数据
+            ResultSet rs = st.executeQuery("select * from member");//读取刚插入的数据
            while(rs.next()){
                 String id = rs.getString(1);
                 System.out.println("id = " + id);
-                System.out.print("1-");
             }
         } catch(Exception e){
             e.printStackTrace();

@@ -36,37 +36,30 @@
           <h2 class="content-head is-center">Dolore magna aliqua. Uis aute irure.</h2>
           <div id="layout">
               <input type="button" onclick="p()" value=" post() " />
-              <input type="button" onclick="g()" value=" get() " />
               <button class="pure-button" onclick="add()"> add() </button>
               <a href="g/i/1"> getUser(1) </a>
           </div>
           <div class="pure-g">
               <div class="l-box-lrg pure-u-1 pure-u-med-2-5">
+                  <h4>这是清单1</h4>
+                  <table class="pure-table pure-table-bordered" id="goods-list">
+                      <thead><tr><th>名称</th><th>规格</th></tr></thead>
+                  </table>
+              </div>
+              <div class="l-box-lrg pure-u-1 pure-u-med-1-5">
+                  <h4>这是清单2</h4>
+                  <table class="pure-table pure-table-bordered" id="user-list">
+                      <thead><tr><th>名称</th></tr></thead>
+                  </table>
+              </div>
+              <div class="l-box-lrg pure-u-1 pure-u-med-2-5">
                   <form class="pure-form pure-form-stacked">
                       <fieldset>
-                          <label for="email">Your Name</label>
-                          <input id="email" type="text" placeholder="Your Name">
-
-                          <label for="password">Your Password</label>
-                          <input id="password" type="password" placeholder="Your Password">
-
-                          <button type="submit" class="pure-button">Sign Up</button>
+                          <label for="name"> 名称 </label>
+                          <input required name="name" id="name" type="text" placeholder="Your Name">
+                          <button onclick="add()" type="button" class="pure-button"> Insert  </button>
                       </fieldset>
                   </form>
-              </div>
-              <div class="l-box-lrg pure-u-1 pure-u-med-3-5">
-                  <h4>Contact Us</h4>
-                  <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat.
-                  </p>
-                  <h4>More Information</h4>
-                  <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
               </div>
           </div>
       </div>
@@ -95,7 +88,27 @@
       function g(){
           $.get("g/get")
                   .done(function(data) {
-                      console.log(data.id);
+                      $("#goods-list tbody tr").remove();
+                      var html = "";
+                      $.each(data, function(i, e){
+                        html += "<tr id='" + e.id + "'>"
+                             + "<td>" + e.name + "</td>"
+                             + "<td>" + e.model + "</td></tr>";
+                      });
+                      $("#goods-list").append(html);
+                  });
+      }
+
+      function u(){
+          $.get("g/u")
+                  .done(function(data) {
+                      $("#user-list tbody tr").remove();
+                      var html = "";
+                      $.each(data, function(i, e){
+                          html += "<tr id='" + e.id + "'>"
+                                  + "<td>" + e.name + "</td></tr>";
+                      });
+                      $("#user-list").append(html);
                   });
       }
 
@@ -105,17 +118,23 @@
               url: "g/add",
               dataType: "json",
               contentType:'application/json',
-              data: JSON.stringify({"id": "1", "name": "狄安娜", "model": "本科", "type": "女生"})
+              data: JSON.stringify({"name": $('#name').val(), "status": "1"})
           }).done(function(result) {
-                      console.log(result);
+                      refresh();
                   })
                   .error(function(){
                       console.log("something wrong with ajax");
+                      refresh();
                   });
       }
 
-      $(document).ready(function(){
+      function refresh(){
+          g();
+          u();
+      }
 
+      $(document).ready(function(){
+          refresh();
       })
   </script>
   </body>

@@ -1,31 +1,36 @@
-package com.canteen.dao;
+package com.canteen.service;
 
 import com.canteen.common.dao.BaseDao;
 import com.canteen.entity.Goods;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * User: lixy
  * Mail: admin@TomyTime.com
- * Date: 14-2-16 下午1:07
+ * Date: 14-2-16 下午1:13
  */
-public class GoodsDaoImpl {
-
+@Component("goodsService")
+public class GoodsServiceImpl {
+    @Resource(name="baseDao")
     private BaseDao baseDao;
 
     public void setBaseDao(BaseDao baseDao) {
         this.baseDao = baseDao;
     }
 
-    public Goods getGoodsById(String id) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Goods getGoodsById(String id){
+        String hql = "from Goods g where g.Id=?";
+
+        return (Goods) baseDao.find(hql, new String[]{id});
     }
 
-    public List<Goods> getGoods(String type){
+    public List<Goods> getGoods(String type) {
         String hql = "from Goods g where g.Type=?";
 
-        return baseDao.find(hql, new String[] {type});
+        return baseDao.find(hql, new String[]{type});
     }
 
     public List<Goods> getAllGoods() {
@@ -41,7 +46,6 @@ public class GoodsDaoImpl {
     }
 
     public boolean deleteGoods(String id) {
-        return baseDao.delOrUpdate("delete Goods g where g.Id = ?", new String[] {id});
+        return baseDao.delOrUpdate("delete Goods g where g.Id = ?", new String[]{id});
     }
-
 }
