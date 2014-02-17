@@ -17,8 +17,7 @@
       <!--<![endif]-->
       <script type="text/javascript" src="/ca/static/js/jquery-1.8.3.js"></script>
   </head>
-  <body>   <!--yui3-skin-sam-->
-
+  <body>
   <div class="header">
       <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
           <a class="pure-menu-heading" href="">Your Site</a>
