@@ -15,4 +15,10 @@
         <property name="baseDao" ref="baseDao" />
     </bean>
 
+    <!-- purchase Manager -->
+    <bean id="purchaseService" class="com.canteen.service.PurchaseServiceImpl">
+        <property name="baseDao" ref="baseDao" />
+        <property name="goodsService" ref="goodsService" />
+    </bean>
+
 </beans>

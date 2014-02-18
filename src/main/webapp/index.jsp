@@ -15,7 +15,7 @@
       <!--[if gt IE 8]><!-->
       <link rel="stylesheet" href="static/css/grid.css">
       <!--<![endif]-->
-      <script type="text/javascript" src="/ca/static/js/jquery-1.8.3.js"></script>
+      <script type="text/javascript" src="static/js/jquery-1.8.3.js"></script>
   </head>
   <body>
   <div class="header">
@@ -24,7 +24,7 @@
 
           <ul>
               <li class="pure-menu-selected"><a href="#">Home</a></li>
-              <li><a href="#">Tour</a></li>
+              <li><a href="<%=request.getContextPath()%>/p/index" title="交易记录">交易记录</a></li>
               <li><a href="#">Sign Up</a></li>
           </ul>
       </div>
@@ -32,31 +32,46 @@
 
   <div class="content-wrapper">
       <div class="content">
-          <h2 class="content-head is-center">Dolore magna aliqua. Uis aute irure.</h2>
-          <div id="layout">
-              <input type="button" onclick="p()" value=" post() " />
-              <button class="pure-button" onclick="add()"> add() </button>
-              <a href="g/i/1"> getUser(1) </a>
-          </div>
+          <h2 class="content-head is-center">Genius only means hard-working all one's life.</h2>
           <div class="pure-g">
-              <div class="l-box-lrg pure-u-1 pure-u-med-2-5">
-                  <h4>这是清单1</h4>
+              <div class="l-box-lrg pure-u-3-8">
+                  <h4>货品清单</h4>
                   <table class="pure-table pure-table-bordered" id="goods-list">
-                      <thead><tr><th>名称</th><th>规格</th></tr></thead>
+                      <thead><tr><th>名称</th></tr></thead>
                   </table>
               </div>
-              <div class="l-box-lrg pure-u-1 pure-u-med-1-5">
+              <div class="l-box-lrg pure-u-2-8">
                   <h4>这是清单2</h4>
                   <table class="pure-table pure-table-bordered" id="user-list">
                       <thead><tr><th>名称</th></tr></thead>
                   </table>
               </div>
-              <div class="l-box-lrg pure-u-1 pure-u-med-2-5">
-                  <form class="pure-form pure-form-stacked">
+              <div class="l-box-lrg pure-u-3-8">
+                  <form id = "purchase_form" method="post" action="<%=request.getContextPath()%>/p/add" class="pure-form pure-form-stacked">
                       <fieldset>
-                          <label for="name"> 名称 </label>
-                          <input required name="name" id="name" type="text" placeholder="Your Name">
-                          <button onclick="add()" type="button" class="pure-button"> Insert  </button>
+                          <div class="pure-control-group">
+                              <label for="goods-select"> 名称 </label>
+                              <select readonly required name="gid" id="goods-select"></select>
+                          </div>
+                          <div class="pure-control-group">
+                              <label for="price"> 单价(元) </label>
+                              <input required pattern="\d{1,10}(\.\d{1,2})?" name="price" id="price" type="text" placeholder="商品单价" />
+                          </div>
+                          <div class="pure-control-group">
+                              <label for="amount"> 数量 </label>
+                              <input pattern="\d{1,8}" required name="amount" id="amount" type="text" placeholder="采购数量" />
+                          </div>
+                          <div class="pure-control-group">
+                              <label for="subtotal"> 总额(元) </label>
+                              <input readonly required name="subtotal" id="subtotal" type="text" placeholder="总金额" />
+                          </div>
+                          <div class="pure-control-group">
+                              <label for="daytime"> 日期 </label>
+                              <input required name="daytime" id="daytime" type="date" placeholder="采购日期" />
+                          </div>
+                          <div class="pure-controls">
+                              <button type="submit" lass="pure-button pure-button-primary">提交</button>
+                          </div>
                       </fieldset>
                   </form>
               </div>
@@ -85,21 +100,23 @@
       }
 
       function g(){
-          $.get("g/get")
+          $.get("<%=request.getContextPath()%>/g/get")
                   .done(function(data) {
                       $("#goods-list tbody tr").remove();
-                      var html = "";
+                      var html = "", select = "";
                       $.each(data, function(i, e){
                         html += "<tr id='" + e.id + "'>"
-                             + "<td>" + e.name + "</td>"
-                             + "<td>" + e.model + "</td></tr>";
+                             + "<td>" + e.name + "_" + e.model + "</td></tr>";
+                          select += "<option value='" + e.id + "'>"
+                                 + e.name + "_" + e.model + "</option>";
                       });
                       $("#goods-list").append(html);
+                      $('#goods-select').append(select);
                   });
       }
 
       function u(){
-          $.get("g/u")
+          $.get("<%=request.getContextPath()%>/g/u")
                   .done(function(data) {
                       $("#user-list tbody tr").remove();
                       var html = "";
@@ -111,20 +128,21 @@
                   });
       }
 
-      function add(){
-          $.ajax({
+      function purchase(){
+          console.log($("#purchase_form").serialize());
+          /*$.ajax({
               type: "POST",
-              url: "g/add",
+              url: "g/in",
               dataType: "json",
               contentType:'application/json',
-              data: JSON.stringify({"name": $('#name').val(), "status": "1"})
+              data: JSON.stringify({"gid": $('#goods-select').val(), "price": $('#pr')})
           }).done(function(result) {
                       refresh();
                   })
                   .error(function(){
                       console.log("something wrong with ajax");
                       refresh();
-                  });
+                  });*/
       }
 
       function refresh(){
@@ -134,6 +152,13 @@
 
       $(document).ready(function(){
           refresh();
+          $("#amount, #price").blur(function(){
+              var amount = $("#amount").val(), price = $("#price").val();
+              if(/^\d{1,8}$/.test(amount)
+                  && /^\d{1,10}(\.\d{1,2})?$/.test(price)){
+                  $("#subtotal").val((parseInt(amount) * parseFloat(price)).toFixed(2));
+              }
+          })
       })
   </script>
   </body>

@@ -3,6 +3,7 @@ package com.canteen.controller;
 import com.canteen.entity.Goods;
 import com.canteen.entity.User;
 import com.canteen.service.GoodsServiceImpl;
+import com.canteen.service.PurchaseServiceImpl;
 import com.canteen.service.UserServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ public class IndexController {
     private GoodsServiceImpl goodsService;
     @Resource(name="userService")
     private UserServiceImpl userService;
+    @Resource(name="purchaseService")
+    private PurchaseServiceImpl purchaseService;
 
     public void setGoodsService(GoodsServiceImpl goodsService) {
         this.goodsService = goodsService;
@@ -37,6 +40,10 @@ public class IndexController {
 
     public void setUserService(UserServiceImpl userService) {
         this.userService = userService;
+    }
+
+    public void setPurchaseService(PurchaseServiceImpl purchaseService) {
+        this.purchaseService = purchaseService;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)

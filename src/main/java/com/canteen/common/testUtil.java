@@ -47,7 +47,9 @@ public class testUtil {
             for(int i = 0; i < sqlArray.length; i++){
                 //st.executeUpdate(sqlArray[i]);
             }*/
-            ResultSet rs = st.executeQuery("select * from member");//读取刚插入的数据
+            ResultSet rs = st.executeQuery("select g.name||'_'||g.model as id," +
+                    "p.price, p.subtotal, p.daytime, p.amount from purchase p, " +
+                    "goods g where p.gid = g.id order by p.daytime desc");//读取刚插入的数据
            while(rs.next()){
                 String id = rs.getString(1);
                 System.out.println("id = " + id);

@@ -108,6 +108,18 @@ public class DateUtils {
 		return strYesterday;
 	}
 
+    public static String getDateMillisecond(String strDate) {
+        DateFormat df = DateFormat.getDateInstance();
+        Date date = null;
+        try {
+            date = df.parse(strDate);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return date.getTime()+"";
+    }
+
 	/**
 	 * 获得time2 距离 time1的天数
 	 * 
