@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 public class BaseDao extends HibernateDaoSupport implements IBaseDao {
@@ -120,12 +121,25 @@ public class BaseDao extends HibernateDaoSupport implements IBaseDao {
 		return query.executeUpdate();
 	}
 
-	public void save(BaseEntity entity) {
-		this.getHibernateTemplate().save(entity);
+	public void save(BaseEntity entity) throws Exception {
+        try{
+            this.getHibernateTemplate().save(entity);
+        }catch (DataAccessException exception){
+            logger.error("DataAccessException in save()");
+            System.out.println("BaseDao save() error");
+            throw new Exception("DataAccessException in save()");
+        }
+
 	}
 
-	public void update(BaseEntity entity) {
-		this.getHibernateTemplate().update(entity);
+	public void update(BaseEntity entity) throws Exception {
+        try {
+            this.getHibernateTemplate().update(entity);
+        }catch (DataAccessException exception){
+            logger.error("DataAccessException in update()");
+            System.out.println("BaseDao update() error");
+            throw new Exception("DataAccessException in update()");
+        }
 	}
 
 	public BaseEntity findById(String id,Class className){

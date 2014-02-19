@@ -38,7 +38,8 @@ daytime varchar(14) NOT NULL --交易时间
 
 CREATE TABLE capacity
 (
-gid varchar(32) NOT NULL PRIMARY KEY ,--商品编号
+id varchar(32) PRIMARY KEY ,
+gid varchar(32) NOT NULL ,--商品编号
 amount varchar(8) NOT NULL , --库存数量
 subtotal varchar(16) NOT NULL --库存金额
 );

@@ -1,5 +1,6 @@
 package com.canteen.controller;
 
+import com.canteen.entity.Capacity;
 import com.canteen.entity.Goods;
 import com.canteen.entity.User;
 import com.canteen.service.GoodsServiceImpl;
@@ -7,7 +8,6 @@ import com.canteen.service.PurchaseServiceImpl;
 import com.canteen.service.UserServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,10 +46,21 @@ public class IndexController {
         this.purchaseService = purchaseService;
     }
 
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public ModelAndView getIndex() {
+        return new ModelAndView("goods");
+    }
+
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public @ResponseBody List<Goods> getAllGoods() {
         List<Goods> goodsList = goodsService.getAllGoods();
         return goodsList;
+    }
+
+    @RequestMapping(value = "/getC", method = RequestMethod.GET)
+    public @ResponseBody List<Capacity> getCapacity() {
+        List<Capacity> capacityList = purchaseService.getAllCapacity();
+        return capacityList;
     }
 
     @RequestMapping(value = "/u", method = RequestMethod.GET)
@@ -57,20 +68,13 @@ public class IndexController {
         return userService.getAllUser();
     }
 
-    @RequestMapping(value = "/p", method = RequestMethod.POST)
-    public @ResponseBody Goods p(@RequestBody Goods e){
-        logger.info("post: " + e.getId());
-        e.setId("这是Id");
-        return e;
-    }
-
-    @RequestMapping(value = "/i/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/i/{id}", method = RequestMethod.GET)
     public ModelAndView getGoodsById(@PathVariable("id") String id){
         ModelAndView mav = new ModelAndView("/index");
         mav.addObject("message", "halo world");
         mav.addObject("goods", goodsService.getGoodsById(id));
         return mav;
-    }
+    }*/
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addUser(@RequestBody User u){

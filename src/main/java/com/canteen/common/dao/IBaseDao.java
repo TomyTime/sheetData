@@ -5,6 +5,7 @@ import java.util.List;
 import com.canteen.common.utils.Page;
 import com.canteen.entity.BaseEntity;
 import org.hibernate.Session;
+import org.springframework.dao.DataAccessException;
 
 /**
  * Data Access Object (Dao) interface. This is an empty interface used to tag
@@ -89,14 +90,14 @@ public interface IBaseDao {
 	 * 
 	 * @param entity
 	 */
-	public void save(BaseEntity entity);
+	public void save(BaseEntity entity) throws Exception;
 
 	/**
 	 * 修改记录
 	 * 
 	 * @param entity
 	 */
-	public void update(BaseEntity entity);
+	public void update(BaseEntity entity) throws Exception;
 
 	public BaseEntity findById(String id, Class className);
 

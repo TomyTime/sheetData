@@ -24,7 +24,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">true</prop>
             </props>
         </property>
@@ -48,13 +48,13 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <aop:config>
-        <aop:pointcut id="txServices" expression="execution(* com.canteen.service..*(..))"/>
+        <aop:pointcut id="txServices" expression="execution(* com.canteen.controller..*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txServices" />
     </aop:config>
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" propagation="REQUIRED" />
-            <tx:method name="in*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
             <tx:method name="delete*" propagation="REQUIRED" />
             <tx:method name="create*" propagation="REQUIRED" />

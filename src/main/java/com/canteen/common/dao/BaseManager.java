@@ -10,12 +10,22 @@ public class BaseManager {
 		this.baseDao = baseDao;
 	}
 	
-	public void update(BaseEntity entity){
-		baseDao.update(entity);
+	public boolean update(BaseEntity entity){
+        try{
+            baseDao.update(entity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
 	}
 	
-	public void save(BaseEntity entity){
-		baseDao.save(entity);
+	public boolean save(BaseEntity entity){
+        try{
+            baseDao.save(entity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
 	}
 	
 	

@@ -37,12 +37,22 @@ public class GoodsServiceImpl {
         return baseDao.find("from Goods");
     }
 
-    public void addGoods(Goods goods) {
-        baseDao.save(goods);
+    public boolean addGoods(Goods goods){
+        try{
+            baseDao.save(goods);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
-    public void updateGoods(Goods goods) {
-        baseDao.update(goods);
+    public boolean updateGoods(Goods goods) {
+        try{
+            baseDao.update(goods);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean deleteGoods(String id) {

@@ -37,12 +37,22 @@ public class UserServiceImpl {
         return baseDao.find("from User");
     }
 
-    public void addUser(User user) {
-        baseDao.save(user);
+    public boolean addUser(User user) {
+        try{
+            baseDao.save(user);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
-    public void updateUser(User user) {
-        baseDao.update(user);
+    public boolean updateUser(User user) {
+        try{
+            baseDao.update(user);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean deleteUser(String id) {

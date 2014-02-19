@@ -20,7 +20,9 @@ public class Capacity extends BaseEntity{
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid",strategy="uuid")
     @Column(length=32)
-    private String id;      //采购编号
+    private String id;
+    @Column(length = 32)
+    private String gid; //采购编号
     @Column(length=8)
     private String amount;    //库存数量
     @Column(length=16)
@@ -40,6 +42,14 @@ public class Capacity extends BaseEntity{
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getGid() {
+        return gid;
+    }
+
+    public void setGid(String gid) {
+        this.gid = gid;
     }
 
     public String getSubtotal() {

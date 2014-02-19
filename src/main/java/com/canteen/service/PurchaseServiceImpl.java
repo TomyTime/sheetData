@@ -1,6 +1,7 @@
 package com.canteen.service;
 
 import com.canteen.common.dao.BaseDao;
+import com.canteen.entity.Capacity;
 import com.canteen.entity.Purchase;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +29,33 @@ public class PurchaseServiceImpl {
     }
 
     public Purchase getPurchaseById(String id){
-        String hql = "from Purchase p where p.Id=?";
+        String hql = "from Purchase p where p.id=?";
 
         return (Purchase) baseDao.find(hql, new String[]{id});
+    }
+
+    public Capacity getCapacityByGid(String gid){
+        String hql = "from Capacity c where c.gid = ?";
+        List<Capacity> resultList = baseDao.find(hql, new String[]{gid});
+        if(resultList.size() != 0){
+            return resultList.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    public List<Purchase> getPurchaseTopList(String gid, int num){
+        String hql = "select p.id, p.gid, p.price, p.subtotal, " +
+                "p.amount, p.daytime, p.username from" +
+                " (select pi.*, row_number() over() as rownum" +
+                " from purchase pi where pi.gid=? order by pi.daytime desc) as p where rownum <= " + num;
+        List<Purchase> resultList = baseDao.findBySql(hql, new String[]{gid}, Purchase.class);
+
+        if(resultList.size() != 0){
+            return resultList;
+        }else{
+            return null;
+        }
     }
 
    /* public List<User> getUser(String type) {
@@ -47,12 +72,48 @@ public class PurchaseServiceImpl {
                 new String[] {}, Purchase.class);
     }
 
-    public void addPurchase(Purchase purchase) {
-        baseDao.save(purchase);
+    public List<Capacity> getAllCapacity() {
+//        return baseDao.find("from Purchase p, Goods g where p.gid = g.id");
+        return baseDao.findBySql("select c.id, g.name||'_'||g.model as gid," +
+                "c.amount, c.subtotal from capacity c, " +
+                "goods g where c.gid = g.id order by g.name||'_'||g.model",
+                new String[] {}, Capacity.class);
     }
 
-    public void updatePurchase(Purchase purchase) {
-        baseDao.update(purchase);
+    public boolean addPurchase(Purchase purchase){
+        try{
+            baseDao.save(purchase);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean addCapacity(Capacity capacity){
+        try{
+            baseDao.save(capacity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean updatePurchase(Purchase purchase) {
+        try{
+            baseDao.update(purchase);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean updateCapacity(Capacity capacity) {
+        try{
+            baseDao.update(capacity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean deletePurchase(String id) {

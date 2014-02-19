@@ -21,10 +21,10 @@
 <div class="header">
     <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
         <a class="pure-menu-heading" href="">Your Site</a>
-
         <ul>
-            <li><a href="<%=request.getContextPath()%>/">Home</a></li>
-            <li class="pure-menu-selected"><a href="<%=request.getContextPath()%>/p/index" title="交易记录">交易记录</a></li>
+            <li><a href="<%=request.getContextPath()%>">Home</a></li>
+            <li><a href="<%=request.getContextPath()%>/g/index" title="货物清单">货物清单</a></li>
+            <li class="pure-menu-selected"><a href="#" title="交易记录">交易记录</a></li>
             <li><a href="#">Sign Up</a></li>
         </ul>
     </div>

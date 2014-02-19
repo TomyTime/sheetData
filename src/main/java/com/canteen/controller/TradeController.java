@@ -1,6 +1,6 @@
 package com.canteen.controller;
 
-import com.canteen.common.utils.DateUtils;
+import com.canteen.entity.Capacity;
 import com.canteen.entity.Purchase;
 import com.canteen.service.GoodsServiceImpl;
 import com.canteen.service.PurchaseServiceImpl;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class TradeController {
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public ModelAndView index(){
+    public ModelAndView getIndex(){
         ModelAndView mav = new ModelAndView("/purchase");
 
         return mav;
@@ -64,6 +65,7 @@ public class TradeController {
     public ModelAndView addPurchase(HttpServletRequest request,HttpServletResponse response){
         logger.info("purchase");
 
+        boolean flag = false;
         Purchase p = new Purchase();
         p.setGid(request.getParameter("gid"));
         p.setAmount(request.getParameter("amount"));
@@ -72,7 +74,29 @@ public class TradeController {
         p.setDaytime(request.getParameter("daytime"));
         p.setUsername("LiYuzhen");
 
-        purchaseService.addPurchase(p);
+        flag = purchaseService.addPurchase(p);
+        Capacity c = null;
+        if(flag){
+            System.out.println("4");
+            c = purchaseService.getCapacityByGid(p.getGid());
+            if(null == c){
+                System.out.println("1");
+                c = new Capacity();
+                c.setSubtotal(p.getSubtotal());
+                c.setAmount(p.getAmount());
+                c.setGid(p.getGid());
+                purchaseService.addCapacity(c);
+            }else{
+                System.out.println("2");
+                c.setAmount((Integer.parseInt(c.getAmount()) + Integer.parseInt(p.getAmount())) + "" );
+                Double subtotal = (Double.parseDouble(c.getSubtotal()) + Double.parseDouble(p.getSubtotal()));
+                DecimalFormat df = new DecimalFormat("#.00");
+                c.setSubtotal( df.format(subtotal) + "");
+                purchaseService.updateCapacity(c);
+            }
+        }   else {
+            System.out.println("3");
+        }
 
         ModelAndView mav = new ModelAndView("redirect:/");
         return mav;

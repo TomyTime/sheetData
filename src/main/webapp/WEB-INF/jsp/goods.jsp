@@ -8,22 +8,22 @@
 <html>
   <head>
     <title>halo</title>
-      <link rel="stylesheet" href="static/css/pure-min.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/pure-min.css">
       <!--[if lte IE 8]>
-      <link rel="stylesheet" href="static/css/grid-old-ie.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/grid-old-ie.css">
       <![endif]-->
       <!--[if gt IE 8]><!-->
-      <link rel="stylesheet" href="static/css/grid.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/grid.css">
       <!--<![endif]-->
-      <script type="text/javascript" src="static/js/jquery-1.8.3.js"></script>
+      <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery-1.8.3.js"></script>
   </head>
   <body>
   <div class="header">
       <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
           <a class="pure-menu-heading" href="">Your Site</a>
           <ul>
-              <li class="pure-menu-selected"><a href="#">Home</a></li>
-              <li><a href="<%=request.getContextPath()%>/g/index" title="货物清单">货物清单</a></li>
+              <li><a href="<%=request.getContextPath()%>">Home</a></li>
+              <li class="pure-menu-selected"><a href="#" title="货物清单">货物清单</a></li>
               <li><a href="<%=request.getContextPath()%>/p/index" title="交易记录">交易记录</a></li>
               <li><a href="#">Sign Up</a></li>
           </ul>
@@ -35,9 +35,9 @@
           <h2 class="content-head is-center">Genius only means hard-working all one's life.</h2>
           <div class="pure-g">
               <div class="l-box-lrg pure-u-1-2">
-                  <h4>库存清单</h4>
-                  <table class="pure-table pure-table-bordered" id="capacity-list">
-                      <thead><tr><th>名称</th><th>数量</th><th>金额(元)</th></tr></thead>
+                  <h4>货品清单</h4>
+                  <table class="pure-table pure-table-bordered" id="goods-list">
+                      <thead><tr><th>名称</th></tr></thead>
                   </table>
               </div>
               <div class="l-box-lrg pure-u-3-8">
@@ -64,7 +64,7 @@
                               <input required name="daytime" id="daytime" type="date" placeholder="采购日期" />
                           </div>
                           <div class="pure-controls">
-                              <button type="submit" class="pure-button pure-button-primary"> 采 购 </button>
+                              <button type="submit" lass="pure-button pure-button-primary">提交</button>
                           </div>
                       </fieldset>
                   </form>
@@ -106,6 +106,7 @@
                       $('#goods-select').append(select);
                   });
       }
+
       function refresh(){
           g();
           c();

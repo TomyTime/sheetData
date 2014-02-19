@@ -1,7 +1,6 @@
 package com.canteen.common;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -23,8 +22,8 @@ public class testUtil {
 //            Connection conn = DriverManager.getConnection(dbURL);//启动嵌入式数据库
             Connection conn = db.getConnection(dbName, "", "");
             Statement st = conn.createStatement();
-            //st.execute("delete from member u where u.id = '402881e44440657501444077339a0004'");//创建foo表
-            StringBuffer sb = new StringBuffer();
+//           st.execute("select gid from capacity");//创建foo表
+//            StringBuffer sb = new StringBuffer();
             /*sb.append("CREATE TABLE capacity")
                     .append("(")
                     .append("id varchar(32) NOT NULL PRIMARY KEY ,")
@@ -47,11 +46,15 @@ public class testUtil {
             for(int i = 0; i < sqlArray.length; i++){
                 //st.executeUpdate(sqlArray[i]);
             }*/
-            ResultSet rs = st.executeQuery("select g.name||'_'||g.model as id," +
-                    "p.price, p.subtotal, p.daytime, p.amount from purchase p, " +
-                    "goods g where p.gid = g.id order by p.daytime desc");//读取刚插入的数据
-           while(rs.next()){
-                String id = rs.getString(1);
+            /*ResultSet rs = st.executeQuery("select p.id, p.price, p.subtotal, " +
+                    "p.amount, p.daytime, p.username from" +
+                            " (select row_number() over() as rownum,pi.*" +
+                            " from purchase pi where pi.id='p' order by pi.daytime desc) as p where p.rownum <= 1");//读取刚插入的数据
+            */ResultSet rs = st.executeQuery("select c.id, g.name||'_'||g.model as gid," +
+                    "c.amount, c.subtotal from capacity c, " +
+                    "goods g where c.gid = g.id order by g.name||'_'||g.model");
+            while(rs.next()){
+                String id = rs.getString(2);
                 System.out.println("id = " + id);
             }
         } catch(Exception e){
