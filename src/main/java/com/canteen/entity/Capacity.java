@@ -23,6 +23,8 @@ public class Capacity extends BaseEntity{
     private String id;
     @Column(length = 32)
     private String gid; //采购编号
+    @Column(length=12)
+    private String price;    //单价
     @Column(length=8)
     private String amount;    //库存数量
     @Column(length=16)
@@ -42,6 +44,14 @@ public class Capacity extends BaseEntity{
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getGid() {

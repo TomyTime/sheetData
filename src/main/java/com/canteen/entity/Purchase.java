@@ -33,6 +33,8 @@ public class Purchase extends BaseEntity{
     private String daytime;    //采购日期
     @Column(length = 64)
     private String username;    //采购人
+    @Column(length = 20)
+    private String logtime;     //操作时间
 
     public String getId() {
         return id;
@@ -88,5 +90,13 @@ public class Purchase extends BaseEntity{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getLogtime() {
+        return logtime;
+    }
+
+    public void setLogtime(String logtime) {
+        this.logtime = logtime;
     }
 }

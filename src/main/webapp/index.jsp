@@ -8,14 +8,21 @@
 <html>
   <head>
     <title>halo</title>
-      <link rel="stylesheet" href="static/css/pure-min.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/pure-min.css">
       <!--[if lte IE 8]>
-      <link rel="stylesheet" href="static/css/grid-old-ie.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/grid-old-ie.css">
       <![endif]-->
       <!--[if gt IE 8]><!-->
-      <link rel="stylesheet" href="static/css/grid.css">
+      <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/grid.css">
       <!--<![endif]-->
-      <script type="text/javascript" src="static/js/jquery-1.8.3.js"></script>
+      <style type="text/css">
+          .table-tr-hover, .table-tr-highlight{
+              background: #6FBEF3;
+              color: white;
+          }
+          #capacity-list{ cursor: pointer; }
+      </style>
+      <script type="text/javascript" src="<%=request.getContextPath()%>/static/js/jquery-1.8.3.js"></script>
   </head>
   <body>
   <div class="header">
@@ -23,6 +30,7 @@
           <a class="pure-menu-heading" href="">Your Site</a>
           <ul>
               <li class="pure-menu-selected"><a href="#">Home</a></li>
+              <li><a href="<%=request.getContextPath()%>/g/list" title=" 采购 ">采 购</a></li>
               <li><a href="<%=request.getContextPath()%>/g/index" title="货物清单">货物清单</a></li>
               <li><a href="<%=request.getContextPath()%>/p/index" title="交易记录">交易记录</a></li>
               <li><a href="#">Sign Up</a></li>
@@ -37,23 +45,28 @@
               <div class="l-box-lrg pure-u-1-2">
                   <h4>库存清单</h4>
                   <table class="pure-table pure-table-bordered" id="capacity-list">
-                      <thead><tr><th>名称</th><th>数量</th><th>金额(元)</th></tr></thead>
+                      <thead><tr><th>名称</th><th>单价(元)</th><th>数量</th><th>金额(元)</th></tr></thead>
+                      <tbody></tbody>
                   </table>
               </div>
               <div class="l-box-lrg pure-u-3-8">
-                  <form id = "purchase_form" method="post" action="<%=request.getContextPath()%>/p/add" class="pure-form pure-form-stacked">
+                  <form id = "purchase_form" method="post" action="<%=request.getContextPath()%>/p/addT" class="pure-form pure-form-stacked">
                       <fieldset>
                           <div class="pure-control-group">
-                              <label for="goods-select"> 名称 </label>
-                              <select readonly required name="gid" id="goods-select"></select>
+                              <label for="user-select"> 食堂名称 </label>
+                              <select readonly required name="uid" id="user-select"></select>
+                          </div>
+                          <div class="pure-control-group">
+                              <label for="goods-name"> 商品名称 </label>
+                              <input type="text" readonly required name="goods-name" id="goods-name" placeholder="商品名称" />
                           </div>
                           <div class="pure-control-group">
                               <label for="price"> 单价(元) </label>
-                              <input required pattern="\d{1,10}(\.\d{1,2})?" name="price" id="price" type="text" placeholder="商品单价" />
+                              <input readonly required pattern="\d{1,10}(\.\d{1,2})?" name="price" id="price" type="text" placeholder="商品单价" />
                           </div>
                           <div class="pure-control-group">
                               <label for="amount"> 数量 </label>
-                              <input pattern="\d{1,8}" required name="amount" id="amount" type="text" placeholder="采购数量" />
+                              <input pattern="\d{1,8}" required name="amount" id="amount" type="text" placeholder="分配数量" />
                           </div>
                           <div class="pure-control-group">
                               <label for="subtotal"> 总额(元) </label>
@@ -61,10 +74,11 @@
                           </div>
                           <div class="pure-control-group">
                               <label for="daytime"> 日期 </label>
-                              <input required name="daytime" id="daytime" type="date" placeholder="采购日期" />
+                              <input required name="daytime" id="daytime" type="date" placeholder="分配日期" />
                           </div>
                           <div class="pure-controls">
-                              <button type="submit" class="pure-button pure-button-primary"> 采 购 </button>
+                              <input type="hidden" value="" name="gid" id="goods-id" />
+                              <button type="submit" class="pure-button pure-button-primary"> 分 配 </button>
                           </div>
                       </fieldset>
                   </form>
@@ -81,45 +95,63 @@
           $.get("<%=request.getContextPath()%>/g/getC")
                   .done(function(data) {
                       $("#capacity-list tbody tr").remove();
+                      $('#goods-select').empty();
                       var html = "";
                       $.each(data, function(i, e){
                           html += "<tr id='" + e.id + "'>"
-                                  + "<td>" + e.gid + "</td><td>" + e.amount
+                                  + "<td>" + e.gid + "</td><td>"
+                                  + e.price + "</td><td>" + e.amount
                                   + "</td><td>" + e.subtotal + "</td></tr>";
                       });
-                      $("#capacity-list").append(html);
+                      $("#capacity-list tbody").append(html);
                   });
       }
 
-      function g(){
-          $.get("<%=request.getContextPath()%>/g/get")
+      function u(){
+          $.get("<%=request.getContextPath()%>/g/getU")
                   .done(function(data) {
-                      $("#goods-list tbody tr").remove();
-                      var html = "", select = "";
+                      $("#user-list tbody tr").remove();
+                      $("#user-select").empty();
+                      var select = "";
                       $.each(data, function(i, e){
-                        html += "<tr id='" + e.id + "'>"
-                             + "<td>" + e.name + "_" + e.model + "</td></tr>";
-                          select += "<option value='" + e.id + "'>"
-                                 + e.name + "_" + e.model + "</option>";
+                        select += "<option value='" + e.id + "'>" + e.name + "</option>"
                       });
-                      $("#goods-list").append(html);
-                      $('#goods-select').append(select);
+                      $("#user-select").append(select);
+                      $("#user-select")[0].selectedIndex = 0;
                   });
       }
+
+      function i(){
+          $("#capacity-list tbody").on('click', 'tr', function(){
+              $("#capacity-list tbody tr.table-tr-highlight").removeClass("table-tr-highlight");
+              var $this = $(this);
+              if(!$this.hasClass('table-tr-highlight')){
+                  $this.addClass("table-tr-highlight");
+                  var cells = $this[0].cells;
+                  $("#goods-name").val(cells[0].innerText);
+                  $("#goods-id").val($this[0].id);
+                  $("#price").val(cells[1].innerText);
+                  $("#amount").val("");
+                  $("#subtotal").val("");
+              }
+          });
+      }
+
       function refresh(){
-          g();
+          u();
           c();
+          i();
       }
 
       $(document).ready(function(){
           refresh();
-          $("#amount, #price").blur(function(){
-              var amount = $("#amount").val(), price = $("#price").val();
-              if(/^\d{1,8}$/.test(amount)
-                  && /^\d{1,10}(\.\d{1,2})?$/.test(price)){
-                  $("#subtotal").val((parseInt(amount) * parseFloat(price)).toFixed(2));
+          $("#amount").blur(function(){
+              var amount = $("#amount").val(),
+                  price = $("#price").val();
+              if(amount !== ''){
+                  $("#subtotal").val((parseFloat(price) * parseInt(amount)).toFixed(2));
               }
-          })
+          });
       })
   </script>
   </body>

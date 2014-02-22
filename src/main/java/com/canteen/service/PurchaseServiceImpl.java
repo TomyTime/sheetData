@@ -3,6 +3,7 @@ package com.canteen.service;
 import com.canteen.common.dao.BaseDao;
 import com.canteen.entity.Capacity;
 import com.canteen.entity.Purchase;
+import com.canteen.entity.Trade;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -44,6 +45,16 @@ public class PurchaseServiceImpl {
         }
     }
 
+    public Capacity getCapacityByIdandPrice(String gid, String price){
+        String hql = "from Capacity c where c.gid = ? and c.price = ?";
+        List<Capacity> resultList = baseDao.find(hql, new String[]{gid, price});
+        if(resultList.size() != 0){
+            return resultList.get(0);
+        }else{
+            return null;
+        }
+    }
+
     public List<Purchase> getPurchaseTopList(String gid, int num){
         String hql = "select p.id, p.gid, p.price, p.subtotal, " +
                 "p.amount, p.daytime, p.username from" +
@@ -67,16 +78,24 @@ public class PurchaseServiceImpl {
     public List<Purchase> getAllPurchase() {
 //        return baseDao.find("from Purchase p, Goods g where p.gid = g.id");
         return baseDao.findBySql("select p.id, g.name||'_'||g.model as gid," +
-                "p.price, p.subtotal, p.amount, p.daytime, p.username from purchase p, " +
-                "goods g where p.gid = g.id order by p.daytime desc",
+                "p.price, p.subtotal, p.amount, p.daytime, p.username, p.logtime from purchase p, " +
+                "goods g where p.gid = g.id order by p.logtime desc, p.daytime desc",
                 new String[] {}, Purchase.class);
+    }
+
+    public List<Trade> getAllTrade() {
+//        return baseDao.find("from Purchase p, Goods g where p.gid = g.id");
+        return baseDao.findBySql("select t.id, g.name||'_'||g.model as gid," +
+                "u.name as uid, t.price, t.subtotal, t.amount, t.daytime, t.logtime from trade t, " +
+                "goods g, member u where t.gid = g.id and t.uid = u.id order by t.logtime desc, t.daytime desc",
+                new String[] {}, Trade.class);
     }
 
     public List<Capacity> getAllCapacity() {
 //        return baseDao.find("from Purchase p, Goods g where p.gid = g.id");
-        return baseDao.findBySql("select c.id, g.name||'_'||g.model as gid," +
-                "c.amount, c.subtotal from capacity c, " +
-                "goods g where c.gid = g.id order by g.name||'_'||g.model",
+        return baseDao.findBySql("select c.id||'_'||g.id as id, g.name||'_'||g.model as gid," +
+                "c.price, c.amount, c.subtotal from capacity c, " +
+                "goods g where c.gid = g.id and c.amount != '0' order by g.name||'_'||g.model",
                 new String[] {}, Capacity.class);
     }
 
@@ -92,6 +111,15 @@ public class PurchaseServiceImpl {
     public boolean addCapacity(Capacity capacity){
         try{
             baseDao.save(capacity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean addTrade(Trade trade){
+        try{
+            baseDao.save(trade);
             return true;
         }catch (Exception e){
             return false;

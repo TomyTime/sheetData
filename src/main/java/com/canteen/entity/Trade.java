@@ -25,12 +25,16 @@ public class Trade extends BaseEntity{
     private String gid;    //采购编号
     @Column(length = 32)
     private String uid;   //用户编号
+    @Column(length = 16)
+    private String price;    //交易数量
     @Column(length = 8)
     private String amount;    //交易数量
     @Column(length = 16)
     private String subtotal;   //交易金额
     @Column(length = 14)
     private String daytime;    //交易日期
+    @Column(length = 20)
+    private String logtime;     //操作时间
 
     public String getId() {
         return id;
@@ -56,6 +60,14 @@ public class Trade extends BaseEntity{
         this.uid = uid;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public String getAmount() {
         return amount;
     }
@@ -78,5 +90,13 @@ public class Trade extends BaseEntity{
 
     public void setDaytime(String daytime) {
         this.daytime = daytime;
+    }
+
+    public String getLogtime() {
+        return logtime;
+    }
+
+    public void setLogtime(String logtime) {
+        this.logtime = logtime;
     }
 }

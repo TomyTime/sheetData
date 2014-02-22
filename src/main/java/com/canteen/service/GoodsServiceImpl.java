@@ -56,6 +56,12 @@ public class GoodsServiceImpl {
     }
 
     public boolean deleteGoods(String id) {
-        return baseDao.delOrUpdate("delete Goods g where g.Id = ?", new String[]{id});
+        boolean flag = false;
+        try{
+            flag = baseDao.delOrUpdate("delete Goods g where g.id = ?", new String[]{id});
+        }catch (Exception e){
+            //do something, why do you catch it
+        }
+        return flag;
     }
 }

@@ -22,7 +22,7 @@ public class testUtil {
 //            Connection conn = DriverManager.getConnection(dbURL);//启动嵌入式数据库
             Connection conn = db.getConnection(dbName, "", "");
             Statement st = conn.createStatement();
-//           st.execute("select gid from capacity");//创建foo表
+           st.execute("delete from trade");//创建foo表
 //            StringBuffer sb = new StringBuffer();
             /*sb.append("CREATE TABLE capacity")
                     .append("(")
@@ -50,11 +50,11 @@ public class testUtil {
                     "p.amount, p.daytime, p.username from" +
                             " (select row_number() over() as rownum,pi.*" +
                             " from purchase pi where pi.id='p' order by pi.daytime desc) as p where p.rownum <= 1");//读取刚插入的数据
-            */ResultSet rs = st.executeQuery("select c.id, g.name||'_'||g.model as gid," +
-                    "c.amount, c.subtotal from capacity c, " +
-                    "goods g where c.gid = g.id order by g.name||'_'||g.model");
+            */ResultSet rs = st.executeQuery("select t.id, g.name||'_'||g.model as gid," +
+                    "u.name as uid, t.price, t.subtotal, t.amount, t.daytime, t.logtime from trade t, " +
+                    "goods g, member u where t.gid = g.id and t.uid = u.id order by t.logtime desc, t.daytime desc");
             while(rs.next()){
-                String id = rs.getString(2);
+                String id = rs.getString(1);
                 System.out.println("id = " + id);
             }
         } catch(Exception e){
