@@ -25,6 +25,16 @@
         <mvc:message-converters register-defaults="false">
             <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
         </mvc:message-converters>
+        <!--<mvc:message-converters register-defaults="true">
+            &lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt;
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>-->
     </mvc:annotation-driven>
 
     <!-- 静态资源(js/image)的访问 -->

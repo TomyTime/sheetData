@@ -10,10 +10,10 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-<!-- 配置数据源 -->
+    <!-- 配置数据源 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver"></property>
-        <property name="url" value="jdbc:derby:D:/myJob/Workspaces2/CanteenAccount/target/classes/com/canteen/database/canteenAccountDB;create=true"></property>
+        <property name="url" value="jdbc:derby:/Users/alex/IdeaProjects/sheetData/src/main/resources/canteenAccountDB;create=true"></property>
         <!--<property name="username" value="root"></property>
         <property name="password" value="1"></property>-->
     </bean>
