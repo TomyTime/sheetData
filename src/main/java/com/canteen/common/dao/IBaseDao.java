@@ -1,11 +1,10 @@
 package com.canteen.common.dao;
 
-import java.util.List;
-
 import com.canteen.common.utils.Page;
 import com.canteen.entity.BaseEntity;
 import org.hibernate.Session;
-import org.springframework.dao.DataAccessException;
+
+import java.util.List;
 
 /**
  * Data Access Object (Dao) interface. This is an empty interface used to tag

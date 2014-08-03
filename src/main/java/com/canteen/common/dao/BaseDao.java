@@ -1,18 +1,14 @@
 package com.canteen.common.dao;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.canteen.common.utils.Page;
 import com.canteen.entity.BaseEntity;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.*;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class BaseDao extends HibernateDaoSupport implements IBaseDao {
 

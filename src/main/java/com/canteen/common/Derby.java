@@ -57,7 +57,7 @@ public class Derby {
         props.put("password",password);
         try {
             //create=true表示当数据库不存在时就创建它
-            con = DriverManager.getConnection("jdbc:derby:" + filePath + "../database/" + databaseName + ";create=true", props);
+            con = DriverManager.getConnection("jdbc:derby:" + databaseName + ";create=true", props);
             System.out.println("Connection is successfully established, it use an Embedded database");
         } catch ( SQLException e) {
             // TODO Auto-generated catch block
@@ -72,7 +72,7 @@ public class Derby {
      */
     public void shutdownDatabase(String databaseName){
         try {
-            DriverManager.getConnection("jdbc:derby:" + filePath + "../database/" + databaseName+";shutdown=true");
+            DriverManager.getConnection("jdbc:derby:" + databaseName+";shutdown=true");
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             System.out.println("Database: "+databaseName+" shut down normally");
@@ -102,7 +102,7 @@ public class Derby {
      */
     public Connection getConnection(String databaseName, String user, String password){
         try {
-            con=DriverManager.getConnection("jdbc:derby:" + filePath + "../database/" + databaseName,user,password);
+            con=DriverManager.getConnection("jdbc:derby:" + databaseName,user,password);
             System.out.println("Connection is sucessfully established, it use an Embedded database");
         } catch (SQLException e) {
             // TODO Auto-generated catch block

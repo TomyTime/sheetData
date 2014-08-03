@@ -6,7 +6,7 @@ import com.canteen.entity.User;
 import com.canteen.service.GoodsServiceImpl;
 import com.canteen.service.PurchaseServiceImpl;
 import com.canteen.service.UserServiceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,22 +36,6 @@ public class IndexController {
     private PurchaseServiceImpl purchaseService;
 
     private Goods g;
-
-    public void setGoodsService(GoodsServiceImpl goodsService) {
-        this.goodsService = goodsService;
-    }
-
-    public void setUserService(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
-    public void setPurchaseService(PurchaseServiceImpl purchaseService) {
-        this.purchaseService = purchaseService;
-    }
-
-    public void setGoods(Goods goods) {
-        this.g = goods;
-    }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView getIndex() {
